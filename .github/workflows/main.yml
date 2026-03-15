@@ -1,11 +1,20 @@
-name: Build APK
-on: push
+name: Build EveVPN APK
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Buildozer Action
-        uses: ArtemSerebrennkov/buildozer-action@v1
+      - uses: actions/checkout@v4
+
+      - name: Build with Buildozer
+        uses: AndreMiras/buildozer-action@v2
         with:
           workdir: .
+          buildozer_version: master
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EveVPN-Package
+          path: bin/*.apk
