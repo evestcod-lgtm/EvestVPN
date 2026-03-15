@@ -1,5 +1,5 @@
 name: Build EveVPN APK
-on: [push, pull_request]
+on: push
 
 jobs:
   build:
@@ -7,11 +7,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: AndreMiras/buildozer-action@v2
-        with:
-          workdir: .
-          buildozer_version: master
+      - name: Build APK with Docker
+        run: |
+          docker run --rm -v "$(pwd)":/home/buildozer/hostport buildozer/buildozer --version
+          docker run --rm -v "$(pwd)":/home/buildozer/hostport buildozer/buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
